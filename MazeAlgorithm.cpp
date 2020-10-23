@@ -5,6 +5,9 @@
 
 /*
 * https://www.wikiwand.com/en/A*_search_algorithm
+*
+* f -> Estimated cost from start to goal through cell.
+* g -> Cost from start to cell.
 */
 
 #define uintPair std::pair<unsigned int, unsigned int>
@@ -25,7 +28,9 @@ const uintPair endCell(39, 39);
 struct Cell
 {
 public:
+    // Position of this cell.
     uintPair pos;
+    // Estimated cost to goal through cell.
     unsigned int f = 0;
 
     Cell(uintPair pos, unsigned int f = std::numeric_limits<unsigned int>::max()) : pos(pos), f(f) {}
@@ -68,6 +73,7 @@ int main()
 
     std::map<uintPair, uintPair> cameFrom;
 
+    // Map of costs from start to cells (Cells here defined with position in maze).
     std::map<uintPair, unsigned int> gScores;
     gScores[uintPair{ 1,1 }] = 1;
 
@@ -114,7 +120,7 @@ int main()
                 if (gScores.find(neighbor) == gScores.end() || newGScore < gScores[neighbor]) {
                     // Update new g.
                     gScores[neighbor] = newGScore;
-                    // Calculate f.
+                    // Calculate f using Manhattan-Distance.
                     unsigned int f = newGScore + (endCell.first - x) + (endCell.second - y);
 
                     cameFrom[neighbor] = current;
